@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="196" viewBox="0 0 1000 196" role="img" fill="none"><title>How I work</title><style>.r{animation:up .6s ease-out both}
+@keyframes up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}@media (prefers-reduced-motion: reduce){*{animation:none!important}}</style><g class="r" style="animation-delay:0.00s">
+<rect x="0.5" y="0.5" width="189.4" height="195" rx="14" fill="#0f1620" stroke="#253041"/>
+<rect x="18.0" y="0.5" width="154.4" height="3" rx="1.5" fill="#3fb950"/>
+<text x="18" y="38" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="13" font-weight="700" fill="#3fb950">01</text>
+<text x="172" y="42" text-anchor="end" font-family="'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif" font-size="24" fill="#fff">🚀</text>
+<text x="18" y="92" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans',Helvetica,Arial,sans-serif" font-size="17" font-weight="700" fill="#e6edf3">MVP in 3–7 days</text>
+<g font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans',Helvetica,Arial,sans-serif" font-size="13" fill="#8b949e"><text x="18" y="124">ship first, polish once</text><text x="18" y="142">real users touch it</text></g></g><g class="r" style="animation-delay:0.15s">
+<rect x="202.9" y="0.5" width="189.4" height="195" rx="14" fill="#0f1620" stroke="#253041"/>
+<rect x="220.4" y="0.5" width="154.4" height="3" rx="1.5" fill="#ff6b81"/>
+<text x="220" y="38" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="13" font-weight="700" fill="#ff6b81">02</text>
+<text x="375" y="42" text-anchor="end" font-family="'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif" font-size="24" fill="#fff">🛡️</text>
+<text x="220" y="92" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans',Helvetica,Arial,sans-serif" font-size="17" font-weight="700" fill="#e6edf3">Security first</text>
+<g font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans',Helvetica,Arial,sans-serif" font-size="13" fill="#8b949e"><text x="220" y="124">validated input,</text><text x="220" y="142">parameterized SQL,</text><text x="220" y="160">secrets only in .env</text></g></g><g class="r" style="animation-delay:0.30s">
+<rect x="405.3" y="0.5" width="189.4" height="195" rx="14" fill="#0f1620" stroke="#253041"/>
+<rect x="422.8" y="0.5" width="154.4" height="3" rx="1.5" fill="#a371f7"/>
+<text x="423" y="38" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="13" font-weight="700" fill="#a371f7">03</text>
+<text x="577" y="42" text-anchor="end" font-family="'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif" font-size="24" fill="#fff">⚖️</text>
+<text x="423" y="92" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans',Helvetica,Arial,sans-serif" font-size="17" font-weight="700" fill="#e6edf3">Code decides</text>
+<g font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans',Helvetica,Arial,sans-serif" font-size="13" fill="#8b949e"><text x="423" y="124">the LLM proposes, the</text><text x="423" y="142">code checks and executes</text></g></g><g class="r" style="animation-delay:0.45s">
+<rect x="607.7" y="0.5" width="189.4" height="195" rx="14" fill="#0f1620" stroke="#253041"/>
+<rect x="625.2" y="0.5" width="154.4" height="3" rx="1.5" fill="#39d0d8"/>
+<text x="625" y="38" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="13" font-weight="700" fill="#39d0d8">04</text>
+<text x="780" y="42" text-anchor="end" font-family="'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif" font-size="24" fill="#fff">📏</text>
+<text x="625" y="92" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans',Helvetica,Arial,sans-serif" font-size="17" font-weight="700" fill="#e6edf3">Measured</text>
+<g font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans',Helvetica,Arial,sans-serif" font-size="13" fill="#8b949e"><text x="625" y="124">no test or number behind</text><text x="625" y="142">it, no claim</text></g></g><g class="r" style="animation-delay:0.60s">
+<rect x="810.1" y="0.5" width="189.4" height="195" rx="14" fill="#0f1620" stroke="#253041"/>
+<rect x="827.6" y="0.5" width="154.4" height="3" rx="1.5" fill="#f0883e"/>
+<text x="828" y="38" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="13" font-weight="700" fill="#f0883e">05</text>
+<text x="982" y="42" text-anchor="end" font-family="'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif" font-size="24" fill="#fff">🧠</text>
+<text x="828" y="92" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans',Helvetica,Arial,sans-serif" font-size="17" font-weight="700" fill="#e6edf3">Each mistake once</text>
+<g font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans',Helvetica,Arial,sans-serif" font-size="13" fill="#8b949e"><text x="828" y="124">every solved bug goes</text><text x="828" y="142">into memory</text></g></g></svg>

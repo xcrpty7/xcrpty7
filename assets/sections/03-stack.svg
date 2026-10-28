@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="64" viewBox="0 0 1000 64" role="img" fill="none"><title>03 TECH STACK</title><style>.dot{animation:run 3.2s ease-in-out infinite}
+@keyframes run{0%{transform:translateX(0);opacity:0}10%{opacity:1}80%{opacity:.8}100%{transform:translateX(690px);opacity:0}}@media (prefers-reduced-motion: reduce){*{animation:none!important}}</style><defs><linearGradient id="fade" x1="0" y1="0" x2="1" y2="0">
+<stop offset="0" stop-color="#39d0d8" stop-opacity="0.9"/><stop offset="1" stop-color="#39d0d8" stop-opacity="0"/></linearGradient></defs>
+<rect x="0.5" y="0.5" width="999" height="63" rx="12" fill="#0d1117" stroke="#253041"/>
+<rect x="14" y="16" width="5" height="32" rx="2.5" fill="#39d0d8"/>
+<text x="34" y="41" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="21" font-weight="700" letter-spacing="1">
+<tspan fill="#39d0d8">03</tspan><tspan fill="#e6edf3" dx="14">TECH STACK</tspan></text>
+<rect x="250" y="31" width="726" height="2" fill="url(#fade)"/>
+<circle class="dot" cx="250" cy="32" r="3.5" fill="#39d0d8"/></svg>

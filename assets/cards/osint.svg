@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="228" viewBox="0 0 480 228" role="img" fill="none"><title>OSINT portfolio: OSINT / offensive-security portfolio: fog aura, particle network and an Obsidian-style OSINT chain graph.</title><style>.streak{opacity:1;animation:run 7s linear infinite}
+@keyframes run{from{stroke-dashoffset:0}to{stroke-dashoffset:-1416}}@media (prefers-reduced-motion: reduce){*{animation:none!important}}</style><defs>
+<linearGradient id="bg-osint" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#121a26"/><stop offset="1" stop-color="#0f1620"/></linearGradient>
+<linearGradient id="streak-osint" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#39d0d8"/><stop offset="1" stop-color="#39d0d8"/></linearGradient>
+<radialGradient id="halo-osint" cx="1" cy="0" r="0.8"><stop offset="0" stop-color="#39d0d8" stop-opacity="0.16"/><stop offset="1" stop-color="#39d0d8" stop-opacity="0"/></radialGradient>
+</defs>
+<rect x="1" y="1" width="478" height="226" rx="16" fill="url(#bg-osint)" stroke="#253041" stroke-width="1.5"/>
+<rect x="1" y="1" width="478" height="226" rx="16" fill="url(#halo-osint)"/>
+<rect class="streak" x="1" y="1" width="478" height="226" rx="16" stroke="url(#streak-osint)" stroke-width="2.5"
+ stroke-dasharray="140 1416" stroke-linecap="round" opacity="0"/>
+<rect x="24" y="24" width="46" height="46" rx="12" fill="#0d1117" stroke="#253041"/>
+<text x="47" y="56" text-anchor="middle" font-family="'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif" font-size="24" fill="#fff">🕵️</text>
+<text x="84" y="47" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans',Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#e6edf3">OSINT portfolio</text>
+<text x="84" y="68" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="12.5" fill="#39d0d8">pure HTML/CSS/JS</text>
+<rect x="361" y="28" width="95" height="22" rx="11" fill="#39d0d8" fill-opacity="0.12" stroke="#39d0d8" stroke-opacity="0.55"/>
+<text x="409" y="43" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="11" font-weight="700" letter-spacing="1" fill="#39d0d8">OPEN SOURCE</text>
+<g font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans',Helvetica,Arial,sans-serif" font-size="14.5" fill="#c9d1d9"><text x="24" y="104">OSINT / offensive-security portfolio: fog aura, particle</text><text x="24" y="125">network and an Obsidian-style OSINT chain graph.</text></g>
+<rect x="24" y="184" width="49" height="24" rx="12" fill="#0d1117" stroke="#253041"/><text x="48" y="200.5" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="12" fill="#8b949e">HTML</text><rect x="81" y="184" width="42" height="24" rx="12" fill="#0d1117" stroke="#253041"/><text x="102" y="200.5" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="12" fill="#8b949e">CSS</text><rect x="130" y="184" width="92" height="24" rx="12" fill="#0d1117" stroke="#253041"/><text x="176" y="200.5" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="12" fill="#8b949e">JavaScript</text></svg>
