@@ -19,7 +19,11 @@
   <img src="assets/cards/kuch-3d.svg" width="49%" alt="KUCH: 3D commercial built from Python scripts in Blender"/>
 </p>
 
-<img src="assets/sections/02-products.svg" width="100%" alt="02 · Products shipped"/>
+<img src="assets/sections/02-pipeline.svg" width="100%" alt="02 · How my agents work"/>
+
+<img src="assets/pipeline.svg" width="100%" alt="Pipeline: Telegram → router → LLM brain (proposes, no tools) → code guard (checks and limits) → MCP tools → your yes. Prompt prefix 21k → 2k tokens, cost per call $0.17 → $0.02."/>
+
+<img src="assets/sections/03-products.svg" width="100%" alt="03 · Products shipped"/>
 
 <a href="https://github.com/xcrpty7/moon-mars-analogs"><img src="assets/cards/moon-mars.svg" width="100%" alt="Moon & Mars on Earth: NASA Space Apps atlas of terrestrial analogues for the Moon and Mars"/></a>
 
@@ -30,15 +34,19 @@
   <a href="https://github.com/xcrpty7/maxinaciya-portfolio"><img src="assets/cards/osint.svg" width="49%" alt="OSINT / offensive-security portfolio"/></a>
 </p>
 
-<img src="assets/sections/03-stack.svg" width="100%" alt="03 · Tech stack"/>
+<img src="assets/sections/04-journey.svg" width="100%" alt="04 · Journey"/>
+
+<img src="assets/journey.svg" width="100%" alt="Journey: 2025-03 joined GitHub · 2025-07 team React apps · 2026-03 Savdo-E · 2026-06 TOPEX Texnikumi · 2026-07 MafTravel · 2026-08 AI Tutor · 2026-09 AI coding setup · 2026-10 NASA Space Apps · 2026-10 Jarvis 0.8"/>
+
+<img src="assets/sections/05-stack.svg" width="100%" alt="05 · Tech stack"/>
 
 <img src="assets/stack.svg" width="100%" alt="Stack: Claude Code, Agent SDK, MCP, aiogram, RAG · Python, FastAPI, Node.js, Express, NestJS, Fastify · React, Next.js, TypeScript, Tailwind, Vite, Redux · PostgreSQL, Supabase, MongoDB, SQLite, Prisma, Redis · Docker, Linux, Git, GitHub Actions, Vercel, Render, Cloudflare · Flutter, Dart, Kotlin, Godot, Blender, JavaFX, FFmpeg"/>
 
-<img src="assets/sections/04-rules.svg" width="100%" alt="04 · How I work"/>
+<img src="assets/sections/06-rules.svg" width="100%" alt="06 · How I work"/>
 
 <img src="assets/rules.svg" width="100%" alt="MVP in 3–7 days · Security first · Code decides · Measured · Each mistake once"/>
 
-<img src="assets/sections/05-stats.svg" width="100%" alt="05 · Live stats"/>
+<img src="assets/sections/07-stats.svg" width="100%" alt="07 · Live stats"/>
 
 <img src="assets/stats.svg" width="100%" alt="GitHub stats: public repos, languages, followers"/>
 

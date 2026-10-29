@@ -7,7 +7,7 @@ OUT="${1:?usage: preview.sh <out_dir> [build_script ...]}"
 shift
 DIR="$(cd "$(dirname "$0")" && pwd)"
 SCRIPTS=("$@")
-[ ${#SCRIPTS[@]} -eq 0 ] && SCRIPTS=(build_hero.py build_terminal.py build_cards.py build_stack.py)
+[ ${#SCRIPTS[@]} -eq 0 ] && SCRIPTS=(build_hero.py build_terminal.py build_cards.py build_stack.py build_diagrams.py)
 
 rm -rf "$OUT" && mkdir -p "$OUT/svg"
 for s in "${SCRIPTS[@]}"; do

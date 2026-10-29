@@ -5,7 +5,7 @@ from box-drawing characters into vector shapes so it no longer depends on the fo
 """
 import random
 
-from svg_kit import (BG, CYAN, DIM, GREEN, MONO, MUTED, PURPLE, RED, STATIC, TEXT, esc,
+from svg_kit import (BG, BLUE, CYAN, DIM, GREEN, MONO, MUTED, ORANGE, PINK, PURPLE, RED, STATIC, TEXT, esc,
                      mono_width, svg, typing, write)
 
 LOGO = [
@@ -55,6 +55,20 @@ def logo_shapes(ox: float, oy: float) -> tuple:
     return "".join(blocks), "".join(lines)
 
 
+def rotating(phrases: list, cx: float, y: float) -> str:
+    """Phrases that take turns under the logo, each with its own blinking cursor."""
+    out = []
+    for i, text in enumerate(phrases):
+        w = mono_width(text, 15)
+        x = cx - w / 2
+        hidden = "" if i == 0 else ' opacity="0"' if STATIC else ""
+        out.append(f'<g class="ph ph{i}" style="animation-delay:{3.5 * i}s"{hidden}>'
+                   f'<text x="{x:.1f}" y="{y}" font-family="{MONO}" font-size="15" fill="{MUTED}" '
+                   f'textLength="{w:.0f}" lengthAdjust="spacing" xml:space="preserve">{esc(text)}</text>'
+                   f'<rect class="cursor" x="{x + w + 8:.1f}" y="{y - 13}" width="9" height="17" fill="{GREEN}"/></g>')
+    return "".join(out)
+
+
 def hero() -> str:
     width, height = 1200, 380
     logo_w = len(LOGO[0]) * CELL_W
@@ -70,8 +84,11 @@ def hero() -> str:
         f'r="{rng.choice((1, 1.2, 1.6, 2))}" style="animation-delay:-{rng.uniform(0, 9):.1f}s;'
         f'animation-duration:{rng.uniform(7, 13):.1f}s"/>' for _ in range(26))
     sub1 = "FULL-STACK  ·  AI-AGENT DEVELOPER"
-    sub2 = "Tashkent, UZ  ·  AI agents · Telegram bots · MCP  ·  shipping since 14"
-    cursor_x = width / 2 + mono_width(sub2, 15) / 2 + 6
+    phrases = [
+        "Tashkent, UZ  ·  AI agents · Telegram bots · MCP  ·  shipping since 14",
+        "NASA Space Apps  ·  Moon & Mars on Earth  ·  30 sites, 6 criteria",
+        "the model talks, the code decides  ·  nothing sent without a yes",
+    ]
 
     defs = f"""<defs>
   <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a0f16"/><stop offset="1" stop-color="#07130d"/></linearGradient>
@@ -108,8 +125,7 @@ def hero() -> str:
 <g mask="url(#logoMask)"><rect class="shine" x="-300" y="{oy}" width="260" height="{CELL_H * 6}" fill="url(#shine)" opacity="0"/></g>
 <rect class="scan" x="0" y="0" width="{width}" height="3" fill="{GREEN}" opacity="0"/>
 <text x="{width / 2}" y="{oy + CELL_H * 6 + 52}" text-anchor="middle" font-family="{MONO}" font-size="21" font-weight="700" letter-spacing="7" fill="{TEXT}">{esc(sub1)}</text>
-<text x="{width / 2 - mono_width(sub2, 15) / 2:.1f}" y="{oy + CELL_H * 6 + 84}" font-family="{MONO}" font-size="15" fill="{MUTED}" textLength="{mono_width(sub2, 15):.0f}" lengthAdjust="spacing" xml:space="preserve">{esc(sub2)}</text>
-<rect class="cursor" x="{cursor_x:.1f}" y="{oy + CELL_H * 6 + 71}" width="9" height="17" fill="{GREEN}"/>
+{rotating(phrases, width / 2, oy + CELL_H * 6 + 84)}
 {hud}"""
 
     css = f"""
@@ -128,6 +144,9 @@ def hero() -> str:
 @keyframes scan{{0%{{transform:translateY(0);opacity:0}}5%{{opacity:.35}}95%{{opacity:.35}}100%{{transform:translateY({height}px);opacity:0}}}}
 .cursor{{animation:blink 1s steps(1) infinite}}
 @keyframes blink{{50%{{opacity:0}}}}
+.ph{{opacity:0;animation:phrase 10.5s linear infinite}}
+@keyframes phrase{{0%{{opacity:0}}3%,30%{{opacity:1}}33%,100%{{opacity:0}}}}
+@media (prefers-reduced-motion: reduce){{.ph0{{opacity:1}}}}
 .pulse{{transform-origin:{width - 104}px 34px;animation:pulse 1.6s ease-out infinite}}
 @keyframes pulse{{0%{{opacity:1}}70%{{opacity:.2}}100%{{opacity:1}}}}
 """
@@ -175,10 +194,12 @@ def footer() -> str:
 
 SECTIONS = {
     "01-agents": ("01", "AI & AGENTS", PURPLE),
-    "02-products": ("02", "PRODUCTS SHIPPED", GREEN),
-    "03-stack": ("03", "TECH STACK", CYAN),
-    "04-rules": ("04", "HOW I WORK", "#f0883e"),
-    "05-stats": ("05", "LIVE STATS", "#58a6ff"),
+    "02-pipeline": ("02", "HOW MY AGENTS WORK", GREEN),
+    "03-products": ("03", "PRODUCTS SHIPPED", CYAN),
+    "04-journey": ("04", "JOURNEY", PINK),
+    "05-stack": ("05", "TECH STACK", BLUE),
+    "06-rules": ("06", "HOW I WORK", ORANGE),
+    "07-stats": ("07", "LIVE STATS", "#e3b341"),
 }
 
 if __name__ == "__main__":
