@@ -45,16 +45,16 @@ CARDS = {
              "and an admin panel.",
         chips=["Node/Express", "React", "MongoDB", "Docker"]),
     "topex": dict(
-        emoji="🏫", title="TOPEX Texnikumi", tag="oss", metric="frontend + backend",
+        emoji="🏫", title="TOPEX Texnikumi", tag="private", metric="frontend + backend",
         desc="Education platform for a private technical school in Tashkent, grades 10–11: site, "
              "backend and deploy scripts.",
         chips=["JavaScript", "HTML/CSS", "Render"]),
     "maftravel": dict(
-        emoji="✈️", title="MafTravel", tag="oss", metric="SPA + /api",
+        emoji="✈️", title="MafTravel", tag="private", metric="SPA + /api",
         desc="Travel planner single-page app with serverless-style API handlers, deployed on Render.",
         chips=["React", "Vite", "JavaScript"]),
     "osint": dict(
-        emoji="🕵️", title="OSINT portfolio", tag="oss", metric="pure HTML/CSS/JS",
+        emoji="🕵️", title="OSINT portfolio", tag="private", metric="pure HTML/CSS/JS",
         desc="OSINT / offensive-security portfolio: fog aura, particle network and an Obsidian-style "
              "OSINT chain graph.",
         chips=["HTML", "CSS", "JavaScript"]),

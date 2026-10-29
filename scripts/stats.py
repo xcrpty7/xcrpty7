@@ -1,7 +1,8 @@
-"""Live stats card from the GitHub GraphQL API (run daily by .github/workflows/profile.yml).
+"""Stats card from the GitHub GraphQL API, across all of the owner's repos (private included).
 
-Usage: GITHUB_TOKEN=... python3 scripts/stats.py <login>
-Writes stats.svg into ASSETS_DIR (the workflow publishes it to the `output` branch).
+Usage: GITHUB_TOKEN=$(gh auth token) python3 scripts/stats.py <login>
+Run it locally: the repos are private, so a CI token would only see this profile repo.
+Writes stats.svg into ASSETS_DIR (default: assets/).
 """
 import json
 import os
@@ -14,7 +15,7 @@ from svg_kit import (BG, BLUE, BORDER, CYAN, DIM, GREEN, MONO, MUTED, ORANGE, PA
 QUERY = """query($login: String!) {
   user(login: $login) {
     followers { totalCount }
-    repositories(ownerAffiliations: OWNER, privacy: PUBLIC, isFork: false, first: 100) {
+    repositories(ownerAffiliations: OWNER, isFork: false, first: 100) {
       totalCount
       nodes { languages(first: 10, orderBy: {field: SIZE, direction: DESC}) {
         edges { size node { name color } } } }
@@ -63,10 +64,10 @@ def card(user: dict) -> str:
     # Contribution totals are deliberately not shown: this account's calendar is inflated by
     # auto-generated commits, so only metrics that reflect real work go on the card.
     metrics = [
-        (str(repos["totalCount"]), "PUBLIC REPOS", CYAN),
+        (str(repos["totalCount"]), "REPOSITORIES", CYAN),
         (str(len(used)), "LANGUAGES USED", GREEN),
         (langs[0][0] if langs else "-", "TOP LANGUAGE", ORANGE),
-        (code_size(repos["nodes"]), "CODE IN PUBLIC REPOS", "#e3b341"),
+        (code_size(repos["nodes"]), "CODE WRITTEN", "#e3b341"),
         (str(user["followers"]["totalCount"]), "FOLLOWERS", PURPLE),
         (user["createdAt"][:4], "ON GITHUB SINCE", PINK),
     ]
@@ -94,10 +95,10 @@ def card(user: dict) -> str:
     body = f"""<defs><clipPath id="bar"><rect x="{bar_x}" y="62" width="{bar_w}" height="12" rx="6"/></clipPath></defs>
 <rect x="0.5" y="0.5" width="{width - 1}" height="{height - 1}" rx="16" fill="{PANEL}" stroke="{BORDER}"/>
 {''.join(tiles)}
-<text x="{bar_x}" y="44" font-family="{MONO}" font-size="12" font-weight="700" letter-spacing="1.5" fill="{BLUE}">TOP LANGUAGES · PUBLIC REPOS</text>
+<text x="{bar_x}" y="44" font-family="{MONO}" font-size="12" font-weight="700" letter-spacing="1.5" fill="{BLUE}">TOP LANGUAGES · ALL REPOS</text>
 <g clip-path="url(#bar)">{''.join(bar)}</g>
 {''.join(legend)}
-<text x="{width - 24}" y="{height - 16}" text-anchor="end" font-family="{MONO}" font-size="10.5" fill="{DIM}">live data · GitHub GraphQL API</text>"""
+<text x="{width - 24}" y="{height - 16}" text-anchor="end" font-family="{MONO}" font-size="10.5" fill="{DIM}">all repos are private · numbers only, no code</text>"""
     css = """.m{animation:up .5s ease-out both}
 @keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .b{transform-box:fill-box;transform-origin:left;animation:grow 1.2s cubic-bezier(.2,.8,.2,1) both}
