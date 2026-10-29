@@ -2,15 +2,23 @@
 from svg_kit import (BG, BORDER, CYAN, EMOJI, GREEN, MONO, MUTED, PANEL, PURPLE, SANS, TEXT, esc,
                      mono_width, svg, wrap, write)
 
-W, H = 480, 228
+CARD_W, H = 480, 228
 
 TAGS = {
     "demo": ("LIVE DEMO", GREEN),
     "oss": ("OPEN SOURCE", CYAN),
     "private": ("PRIVATE", PURPLE),
+    "nasa": ("NASA SPACE APPS", "#f0883e"),
 }
 
 CARDS = {
+    "moon-mars": dict(
+        emoji="🪐", title="Moon & Mars on Earth", tag="nasa", width=980,
+        metric="30 Earth sites · 18 Moon/Mars targets · 6 criteria",
+        desc="Interactive atlas of places on Earth that stand in for lunar and Martian conditions. "
+             "Similarity is computed, not claimed: a six-criteria index from open data with a source behind "
+             "every score. 3D globe, reverse search from a Mars target, side-by-side Earth/Mars maps, offline mode.",
+        chips=["React", "three.js / globe.gl", "MapLibre", "Express", "MongoDB", "Zod", "12 unit tests"]),
     "ai-tutor": dict(
         emoji="🎓", title="AI Tutor", tag="demo", metric="uz · ru · en",
         desc="School AI tutor that leads students to the answer instead of doing their homework. "
@@ -65,9 +73,10 @@ def chips(items: list, y: float) -> str:
 
 
 def card(key: str, data: dict) -> str:
+    W = data.get("width", CARD_W)
     tag_text, accent = TAGS[data["tag"]]
     tag_w = mono_width(tag_text, 11) + 22
-    lines = wrap(data["desc"], 58)[:4]
+    lines = wrap(data["desc"], int(58 * W / CARD_W) - 6 if W > CARD_W else 58)[:4]
     desc = "".join(f'<text x="24" y="{104 + i * 21}">{esc(line)}</text>' for i, line in enumerate(lines))
     perimeter = 2 * (W + H)
     body = f"""<defs>

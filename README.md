@@ -21,6 +21,8 @@
 
 <img src="assets/sections/02-products.svg" width="100%" alt="02 · Products shipped"/>
 
+<a href="https://github.com/xcrpty7/moon-mars-analogs"><img src="assets/cards/moon-mars.svg" width="100%" alt="Moon & Mars on Earth: NASA Space Apps atlas of terrestrial analogues for the Moon and Mars"/></a>
+
 <p align="center">
   <img src="assets/cards/savdo-e.svg" width="49%" alt="Savdo-E: sales management platform built by a team of five"/>
   <a href="https://github.com/xcrpty7/topex-texnikumi"><img src="assets/cards/topex.svg" width="49%" alt="TOPEX Texnikumi: education platform"/></a>
@@ -51,6 +53,7 @@
 - **Jarvis** (private): a personal Telegram assistant that runs Claude Code agents. The model proposes, the code decides. Taking tools away from the model cut the cost per call from $0.17 to $0.02.
 - **claude-kit-uz** (private): a one-click Claude Code booster for Uzbek-speaking developers on Windows: task router, BM25 RAG with Uzbek/Russian stemming, error memory on hooks.
 - **KUCH** (private): a 3D commercial for a fictional energy-drink brand, built entirely from Python scripts in Blender.
+- **Moon & Mars on Earth** (NASA Space Apps): an interactive atlas of places on Earth that stand in for lunar and Martian conditions, with a six-criteria similarity index computed from open data.
 - **Savdo-E** (private): a sales management platform for small and mid-size businesses, built with a team of five.
 - **TOPEX Texnikumi**, **MafTravel**, **OSINT portfolio**: products and sites with open source code.
 
