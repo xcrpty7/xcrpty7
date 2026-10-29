@@ -32,7 +32,7 @@ CARDS = {
              "Blender: can, condensation drops, lights, camera moves.",
         chips=["Blender bpy", "Cycles", "Geometry Nodes"]),
     "savdo-e": dict(
-        emoji="🛒", title="Savdo-E", tag="oss", metric="JWT + Google OAuth",
+        emoji="🛒", title="Savdo-E", tag="private", metric="team of 5 · JWT + OAuth",
         desc="Sales management platform for small and mid-size businesses: products, sales, reports "
              "and an admin panel.",
         chips=["Node/Express", "React", "MongoDB", "Docker"]),
