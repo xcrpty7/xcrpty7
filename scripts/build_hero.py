@@ -207,17 +207,20 @@ def hero() -> str:
 
 
 def section(number: str, cmd: str, comment: str) -> str:
-    width, height = 1000, 58
+    """Prompt bar of a section. The transparent strip on top keeps it clear of GitHub's sticky
+    header when a nav key jumps here, and gives sections some air."""
+    width, bar, pad = 1000, 58, 44
     defs, line, _ = prompt(80, 36, cmd, 16, begin=0.35, char_time=0.055, uid="c")
     body = f"""<defs>{defs}</defs>
-<rect x="0.5" y="0.5" width="{width - 1}" height="{height - 1}" rx="10" fill="{BG}" stroke="{BORDER}"/>
+<g transform="translate(0 {pad})">
+<rect x="0.5" y="0.5" width="{width - 1}" height="{bar - 1}" rx="10" fill="{BG}" stroke="{BORDER}"/>
 <rect x="14" y="14" width="50" height="30" rx="3" fill="{TEXT}"/>
 <g font-family="{MONO}">
 {text(39, 35, number, 15, BG, "700", anchor="middle")}
 {line}
 {text(width - 22, 35, f"# {comment}", 13, DIM, anchor="end")}
-</g>"""
-    return svg(width, height, body, BLINK, f"$ {cmd}  # {comment}")
+</g></g>"""
+    return svg(width, bar + pad, body, BLINK, f"$ {cmd}  # {comment}")
 
 
 def footer() -> str:
