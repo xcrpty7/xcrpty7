@@ -6,13 +6,13 @@
 <a href="https://ai-tutor-site-sable.vercel.app"><img src="https://img.shields.io/badge/live_demo-ai_tutor-000000?style=for-the-badge&logo=vercel&logoColor=white&labelColor=555555" alt="AI Tutor live demo"/></a>
 <img src="https://komarev.com/ghpvc/?username=xcrpty7&color=000000&style=for-the-badge&label=PROFILE+VIEWS" alt="Profile views"/>
 
-<a href="#whoami"><img src="assets/keys/f1.svg" height="40" alt="F1 whoami"/></a>
-<a href="#man"><img src="assets/keys/f2.svg" height="40" alt="F2 man"/></a>
-<a href="#projects"><img src="assets/keys/f3.svg" height="40" alt="F3 projects"/></a>
-<a href="#agents"><img src="assets/keys/f4.svg" height="40" alt="F4 agents"/></a>
-<a href="#journey"><img src="assets/keys/f5.svg" height="40" alt="F5 git log"/></a>
-<a href="#stack"><img src="assets/keys/f6.svg" height="40" alt="F6 stack"/></a>
-<a href="#stats"><img src="assets/keys/f7.svg" height="40" alt="F7 htop"/></a>
+<a href="#user-content-whoami"><img src="assets/keys/f1.svg" height="40" alt="F1 whoami"/></a>
+<a href="#user-content-man"><img src="assets/keys/f2.svg" height="40" alt="F2 man"/></a>
+<a href="#user-content-projects"><img src="assets/keys/f3.svg" height="40" alt="F3 projects"/></a>
+<a href="#user-content-agents"><img src="assets/keys/f4.svg" height="40" alt="F4 agents"/></a>
+<a href="#user-content-journey"><img src="assets/keys/f5.svg" height="40" alt="F5 git log"/></a>
+<a href="#user-content-stack"><img src="assets/keys/f6.svg" height="40" alt="F6 stack"/></a>
+<a href="#user-content-stats"><img src="assets/keys/f7.svg" height="40" alt="F7 htop"/></a>
 
 </div>
 
