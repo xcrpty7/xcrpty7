@@ -1,0 +1,2 @@
+# Keep the profile card monochrome: no language bar and no coloured language dot.
+* linguist-detectable=false
