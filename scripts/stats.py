@@ -94,7 +94,7 @@ def card(user: dict) -> str:
     rx = 600
     right = "".join(row(rx, 80 + i * 26, [(f"{k}:".ljust(11), MUTED), (v, WHITE, "700")], size)
                     for i, (k, v) in enumerate(info))
-    keys = [("F1", "whoami"), ("F2", "projects"), ("F3", "agents"), ("F4", "stack"), ("F5", "telegram"),
+    keys = [("F1", "whoami"), ("F2", "man"), ("F3", "projects"), ("F4", "agents"), ("F5", "log"), ("F6", "stack"),
             ("F10", "ship")]
     fkeys, col = [], 0
     bar_y = height - 52

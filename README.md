@@ -6,14 +6,25 @@
 <a href="https://ai-tutor-site-sable.vercel.app"><img src="https://img.shields.io/badge/live_demo-ai_tutor-000000?style=for-the-badge&logo=vercel&logoColor=white&labelColor=555555" alt="AI Tutor live demo"/></a>
 <img src="https://komarev.com/ghpvc/?username=xcrpty7&color=000000&style=for-the-badge&label=PROFILE+VIEWS" alt="Profile views"/>
 
+<a href="#whoami"><img src="assets/keys/f1.svg" height="40" alt="F1 whoami"/></a>
+<a href="#man"><img src="assets/keys/f2.svg" height="40" alt="F2 man"/></a>
+<a href="#projects"><img src="assets/keys/f3.svg" height="40" alt="F3 projects"/></a>
+<a href="#agents"><img src="assets/keys/f4.svg" height="40" alt="F4 agents"/></a>
+<a href="#journey"><img src="assets/keys/f5.svg" height="40" alt="F5 git log"/></a>
+<a href="#stack"><img src="assets/keys/f6.svg" height="40" alt="F6 stack"/></a>
+<a href="#stats"><img src="assets/keys/f7.svg" height="40" alt="F7 htop"/></a>
+
 </div>
 
+<a name="whoami"></a>
 <img src="assets/sections/01-whoami.svg" width="100%" alt="$ neofetch  # who am i"/>
 <img src="assets/whoami.svg" width="100%" alt="neofetch with a spinning 1-bit Earth and a beacon on Tashkent. role: full-stack and AI-agent developer · host: Tashkent, Uzbekistan · uptime: shipping since 14 · kernel: Python, TypeScript, Node, React · shell: zsh + Claude Code + MCP · agents: Telegram bots that do real work · langs: Uzbek, Russian, English · memory: Obsidian RAG, each bug fixed once · motto: the model talks, the code decides"/>
 
+<a name="man"></a>
 <img src="assets/sections/02-man.svg" width="100%" alt="$ man xcrpty7  # what i do"/>
 <img src="assets/man.svg" width="100%" alt="man xcrpty7: builds AI agents that live in Telegram and do real work; the model talks, the code decides, nothing is sent without your yes; ships web apps with auth, payments and admin panels for real businesses. Options: MVP in 3-7 days, security first, the code decides, measured. Bugs: each mistake happens only once."/>
 
+<a name="projects"></a>
 <img src="assets/sections/03-projects.svg" width="100%" alt="$ ls -l ~/projects  # what i built"/>
 <img src="assets/cards/moon-mars.svg" width="100%" alt="Moon & Mars on Earth: NASA Space Apps atlas of terrestrial analogues for the Moon and Mars"/>
 
@@ -28,19 +39,23 @@
   <img src="assets/cards/osint.svg" width="49%" alt="OSINT / offensive-security portfolio"/>
 </p>
 
+<a name="agents"></a>
 <img src="assets/sections/04-pipeline.svg" width="100%" alt="$ cat ~/agents/pipeline.txt  # how my agents work"/>
 <img src="assets/pipeline.svg" width="100%" alt="Pipeline: Telegram → router → LLM brain (proposes, no tools) → code guard (checks and limits, denied actions go back to the model) → MCP tools → your yes. Prompt prefix 21k → 2k tokens, cost per call $0.17 → $0.02."/>
 
+<a name="journey"></a>
 <img src="assets/sections/05-journey.svg" width="100%" alt="$ git log --graph --oneline  # journey"/>
 <img src="assets/journey.svg" width="100%" alt="Journey: 2025-03 joined GitHub · 2025-07 team React apps · 2026-03 Savdo-E · 2026-06 TOPEX Texnikumi · 2026-07 MafTravel · 2026-08 AI Tutor · 2026-09 AI coding setup · 2026-10 NASA Space Apps · 2026-10 Jarvis 0.8"/>
 
+<a name="stack"></a>
 <img src="assets/sections/06-stack.svg" width="100%" alt="$ ls /usr/local/bin  # tech stack"/>
 <img src="assets/stack.svg" width="100%" alt="Stack: Claude Code, Agent SDK, MCP, aiogram, RAG · Python, FastAPI, Node.js, Express, NestJS, Fastify · React, Next.js, TypeScript, Tailwind, Vite, Redux · PostgreSQL, Supabase, MongoDB, SQLite, Prisma, Redis · Docker, Linux, Git, GitHub Actions, Vercel, Render, Cloudflare · Flutter, Dart, Kotlin, Godot, Blender, JavaFX, FFmpeg"/>
 
+<a name="stats"></a>
 <img src="assets/sections/07-stats.svg" width="100%" alt="$ htop  # live stats"/>
 <img src="assets/stats.svg" width="100%" alt="GitHub stats across all my repositories: top languages, repos, code written"/>
 
-<img src="assets/footer.svg" width="100%" alt="$ exit. I don't write code. I ship products."/>
+<img src="assets/footer.svg" width="100%" alt="$ exit, then a spinning ASCII donut. I don't write code. I ship products."/>
 
 <details>
 <summary><b>Plain-text version</b></summary>

@@ -5,6 +5,8 @@ from box-drawing characters into vector shapes so it no longer depends on the fo
 """
 import random
 
+from donut import svg_frames
+
 from svg_kit import (BG, BLINK, BORDER, DIM, MONO, MUTED, STATIC, TEXT, WHITE, appear, esc, mono_width,
                      prompt, row, smil, svg, text, typing, write)
 
@@ -219,43 +221,74 @@ def section(number: str, cmd: str, comment: str) -> str:
 
 
 def footer() -> str:
-    width, height = 1200, 300
-    defs, exit_line, t = prompt(40, 52, "exit", 15, begin=0.4, char_time=0.12, uid="x")
+    """`exit`, then the donut screensaver spins until the CRT powers off and on again."""
+    width, height = 1200, 350
+    dx, dy = 50, 74                       # donut origin
+    x0 = 430                              # text column
+    donut, donut_css = svg_frames(dx, dy, 12, 12.4, 0.1, STATIC)
+    defs, exit_line, t = prompt(x0, 64, "exit", 15, begin=0.4, char_time=0.12, uid="x")
     rows_ = []
-    for i, (s, fill) in enumerate((("logout", MUTED), ("Connection to xcrpty7 closed.", MUTED))):
+    for i, s in enumerate(("logout", "Connection to xcrpty7 closed.")):
         op, show = appear(t + 0.3 + 0.25 * i)
-        rows_.append(f'<g opacity="{op}">{show}{text(40, 78 + 24 * i, s, 15, fill)}</g>')
+        rows_.append(f'<g opacity="{op}">{show}{text(x0, 90 + 24 * i, s, 15, MUTED)}</g>')
     quote = "\"I don't write code. I ship products.\""
     size = 28
     q_w = mono_width(quote, size)
-    x0, qy = (width - q_w) / 2, 178
+    qy = 202
     begin = t + 1.0
     steps = len(quote)
     clip_w = q_w + 4 if STATIC else 0
+    links = [("$ ", WHITE, "700"), ("open t.me/xcrpty7", TEXT), ("  ·  ", DIM), ("open github.com/xcrpty7", TEXT)]
     body = f"""<defs>{defs}
 <clipPath id="type"><rect x="{x0 - 2:.0f}" y="{qy - 34}" width="{clip_w:.0f}" height="48">{typing("width", 0, q_w + 4, steps, begin, 2.4)}</rect></clipPath>
 <pattern id="scan" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="4" height="1" fill="#fff" fill-opacity="0.035"/></pattern>
-<radialGradient id="glow" cx="0.5" cy="0.55" r="0.6"><stop offset="0" stop-color="#fff" stop-opacity="0.07"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<radialGradient id="glow" cx="0.18" cy="0.55" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.07"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
 </defs>
 <rect x="0.5" y="0.5" width="{width - 1}" height="{height - 1}" rx="16" fill="{BG}" stroke="{BORDER}"/>
 <g class="crt" font-family="{MONO}">
 <rect x="1" y="1" width="{width - 2}" height="{height - 2}" rx="15" fill="url(#glow)"/>
+{row(dx, 44, [("$ ", WHITE, "700"), ("./donut", TEXT), ("   # screensaver", DIM)], 12)}
+<g fill="{TEXT}">{donut}</g>
+<path d="M{x0 - 40} 34V{height - 34}" stroke="{BORDER}" stroke-dasharray="2 6"/>
 {exit_line}{''.join(rows_)}
 <g clip-path="url(#type)">{text(x0, qy, quote, size, WHITE, "700")}</g>
 <rect class="cur" x="{x0 + (q_w + 6 if STATIC else 0):.0f}" y="{qy - 24}" width="15" height="28" fill="{WHITE}">{typing("x", x0, x0 + q_w + 6, steps, begin, 2.4)}</rect>
-{row(width / 2 - mono_width("$ open t.me/xcrpty7  ·  open github.com/xcrpty7", 15) / 2, 230,
-     [("$ ", WHITE, "700"), ("open t.me/xcrpty7", TEXT), ("  ·  ", DIM), ("open github.com/xcrpty7", TEXT)], 15)}
-<text x="{width / 2}" y="266" text-anchor="middle" font-size="11.5" fill="{DIM}" letter-spacing="3">BUILT WITH CLAUDE CODE · PURE SVG · NO JAVASCRIPT</text>
+{row(x0, 254, links, 15)}
+{text(x0, 292, "BUILT WITH CLAUDE CODE · PURE SVG · NO JAVASCRIPT", 11.5, DIM)}
 <rect x="1" y="1" width="{width - 2}" height="{height - 2}" rx="15" fill="url(#scan)"/>
 </g>
 <rect class="flat" x="40" y="{height / 2 - 1}" width="{width - 80}" height="2" fill="{WHITE}" opacity="0"/>"""
-    css = f"""{BLINK}
+    css = f"""{BLINK}{donut_css}
 .crt{{transform-origin:{width / 2}px {height / 2}px;animation:crt 16s ease-in-out infinite}}
 @keyframes crt{{0%,80%{{transform:scale(1,1);opacity:1}}83%{{transform:scale(1.03,.004);opacity:1}}84%,96%{{transform:scale(1,.004);opacity:0}}98%{{transform:scale(1.02,1.05);opacity:1}}100%{{transform:scale(1,1)}}}}
 .flat{{transform-origin:{width / 2}px {height / 2}px;animation:flat 16s ease-in infinite}}
 @keyframes flat{{0%,82.5%{{opacity:0;transform:scaleX(1)}}83.5%{{opacity:1;transform:scaleX(1)}}87%{{opacity:1;transform:scaleX(.002)}}89%,95%{{opacity:0;transform:scaleX(.002)}}96%{{opacity:1;transform:scaleX(.002)}}97.5%{{opacity:.9;transform:scaleX(1)}}98.5%,100%{{opacity:0;transform:scaleX(1)}}}}
 """
-    return svg(width, height, body, css, "I don't write code. I ship products.")
+    return svg(width, height, body, css, "$ exit. A spinning ASCII donut. I don't write code. I ship products.")
+
+
+KEYS = [("F1", "whoami"), ("F2", "man"), ("F3", "projects"), ("F4", "agents"), ("F5", "git log"),
+        ("F6", "stack"), ("F7", "htop")]
+
+
+def keycap(index: int, key: str, label: str) -> str:
+    """A keyboard key for the nav row; the row presses itself in a wave every few seconds."""
+    width, height = 132, 46
+    body = f"""<rect x="0.5" y="0.5" width="{width - 1}" height="{height - 1}" rx="8" fill="#1b1b1b" stroke="{BORDER}"/>
+<g class="face">
+<rect x="3" y="2.5" width="{width - 6}" height="{height - 10}" rx="6" fill="#0b0b0b" stroke="#3c3c3c"/>
+<rect class="lit" x="3" y="2.5" width="{width - 6}" height="{height - 10}" rx="6" fill="{TEXT}" opacity="0"/>
+<g font-family="{MONO}">
+{text(11, 15, key, 10, DIM, "700")}
+{text(width / 2, 29, label, 13.5, WHITE, "700", anchor="middle")}
+<g class="lit" opacity="0">{text(11, 15, key, 10, "#555555", "700")}{text(width / 2, 29, label, 13.5, BG, "700", anchor="middle")}</g>
+</g></g>"""
+    delay = 1.2 + 0.18 * index
+    css = f""".face{{animation:press 9s ease-out {delay:.2f}s infinite}}
+@keyframes press{{0%,6%,100%{{transform:translateY(0)}}2%{{transform:translateY(3px)}}}}
+.lit{{animation:lit 9s steps(1) {delay:.2f}s infinite}}
+@keyframes lit{{0%{{opacity:1}}4%,100%{{opacity:0}}}}"""
+    return svg(width, height, body, css, f"{key} {label}")
 
 
 SECTIONS = {
@@ -273,4 +306,6 @@ if __name__ == "__main__":
     write("footer.svg", footer())
     for name, (num, cmd, comment) in SECTIONS.items():
         write(f"sections/{name}.svg", section(num, cmd, comment))
+    for i, (key, label) in enumerate(KEYS):
+        write(f"keys/{key.lower()}.svg", keycap(i, key, label))
     print("hero, footer, sections: ok")

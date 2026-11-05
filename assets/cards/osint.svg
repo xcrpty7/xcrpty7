@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="480" height="236" viewBox="0 0 480 236" role="img" fill="none"><title>OSINT portfolio: OSINT / offensive-security portfolio: fog aura, particle network and an Obsidian-style OSINT chain graph.</title><style>.streak{opacity:1;animation:run 8s linear infinite}
-@keyframes run{from{stroke-dashoffset:0}to{stroke-dashoffset:-1352}}@media (prefers-reduced-motion: reduce){*{animation:none!important}}</style><rect x="0.5" y="0.5" width="479" height="235" rx="12" fill="#000000" stroke="#2e2e2e"/>
+@keyframes run{from{stroke-dashoffset:0}to{stroke-dashoffset:-1352}}.ia{animation:ia 5.1s steps(1) infinite}.ib{animation:ib 5.1s steps(1) infinite}@keyframes ia{0%{opacity:1}96%,100%{opacity:0}}@keyframes ib{0%{opacity:0}96%,100%{opacity:1}}@media (prefers-reduced-motion: reduce){*{animation:none!important}}</style><rect x="0.5" y="0.5" width="479" height="235" rx="12" fill="#000000" stroke="#2e2e2e"/>
 <rect x="10" y="10" width="460" height="216" rx="6" stroke="#2e2e2e"/>
 <rect class="streak" x="10" y="10" width="460" height="216" rx="6" stroke="#ffffff" stroke-width="2"
  stroke-dasharray="120 1352" stroke-linecap="round" opacity="0"/>
@@ -8,7 +8,7 @@
 <text x="26.0" y="14.0" font-size="11.5" fill="#5f5f5f" textLength="124.2" lengthAdjust="spacing" xml:space="preserve"> ~/projects/osint </text>
 <rect x="393.8" y="0" width="60.2" height="20" rx="2" fill="#000000" stroke="#2e2e2e"/><text x="400.8" y="14.5" font-size="11" fill="#9d9d9d" font-weight="700" textLength="46.2" lengthAdjust="spacing" xml:space="preserve">PRIVATE</text>
 <rect x="26" y="34" width="50" height="50" rx="4" stroke="#2e2e2e"/>
-<path d="M45 47h12v3h-12zM39 50h6v3h-6zM57 50h6v3h-6zM36 53h3v3h-3zM48 53h6v3h-6zM63 53h3v3h-3zM33 56h3v3h-3zM45 56h12v3h-12zM66 56h3v3h-3zM33 59h3v3h-3zM45 59h12v3h-12zM66 59h3v3h-3zM36 62h3v3h-3zM48 62h6v3h-6zM63 62h3v3h-3zM39 65h6v3h-6zM57 65h6v3h-6zM45 68h12v3h-12z" fill="#ffffff" shape-rendering="crispEdges"/>
+<path d="M45 47h12v3h-12zM39 50h6v3h-6zM57 50h6v3h-6zM36 53h3v3h-3zM48 53h6v3h-6zM63 53h3v3h-3zM33 56h3v3h-3zM45 56h12v3h-12zM66 56h3v3h-3zM33 59h3v3h-3zM45 59h12v3h-12zM66 59h3v3h-3zM36 62h3v3h-3zM48 62h6v3h-6zM63 62h3v3h-3zM39 65h6v3h-6zM57 65h6v3h-6zM45 68h12v3h-12z" fill="#ffffff" shape-rendering="crispEdges" class="ia"/><path d="M36 56h30v3h-30zM39 59h3v3h-3zM45 59h3v3h-3zM54 59h3v3h-3zM60 59h3v3h-3z" fill="#ffffff" shape-rendering="crispEdges" class="ib" opacity="0"/>
 <text x="92.0" y="56.0" font-size="20" fill="#ffffff" font-weight="700" textLength="180.0" lengthAdjust="spacing" xml:space="preserve">OSINT portfolio</text>
 <text x="92.0" y="78.0" font-size="12.5" fill="#9d9d9d" textLength="120.0" lengthAdjust="spacing" xml:space="preserve">pure HTML/CSS/JS</text>
 <text x="454.0" y="78.0" font-size="12" fill="#5f5f5f" text-anchor="end" textLength="72.0" lengthAdjust="spacing" xml:space="preserve">drwx------</text>

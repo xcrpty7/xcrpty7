@@ -139,6 +139,23 @@ ICONS = {
     ],
 }
 
+# second frames: the icon flips to it for a moment (blink, wave, flicker); (frame, period s, shown %)
+ICON_ALT = {
+    "jarvis": ([".....##.....", ".....##.....", "..########..", ".#........#.", ".#........#.", ".#.##..##.#.",
+                ".#........#.", ".#..####..#.", ".#........#.", "..########..", "...#....#...", "..###..###.."], 4.2, 4),
+    "osint": (["............", "............", "............", "............", "............", ".##########.",
+               "..#.#..#.#..", "............", "............", "............", "............", "............"], 5.1, 4),
+    "kuch-3d": (["...######...", "..#......#..", "..########..", "..#......#..", "..#......#..", "..#......#..",
+                 "..#......#..", "..#......#..", "..#......#..", "..#......#..", "..########..", "...######..."], 3.3, 6),
+    "topex": ([".....##.....", ".....#.##...", ".....#......", "....####....", "..########..", "############",
+               ".#........#.", ".#.##..##.#.", ".#.##..##.#.", ".#........#.", ".#...##...#.", "############"], 1.4, 50),
+    "maftravel": ([".....##.....", ".....##.....", ".....##.....", "....####....", "..########..", "############",
+                   "#....##....#", ".....##.....", ".....##.....", "....####....", "...######...", "............"], 1.8, 50),
+    "moon-mars": (["....####....", "..###.......", ".###........", ".##.........", "###......##.", "###......##.",
+                   "###.........", "###.........", ".##.........", ".###........", "..###.......", "....####...."], 2.6, 50),
+}
+
+
 CARDS = {
     "moon-mars": dict(
         title="Moon & Mars on Earth", tag="nasa", width=980,
@@ -216,6 +233,16 @@ def card(key: str, data: dict) -> str:
     desc = "".join(text(26, 116 + i * 20, line, 13, "#cfcfcf") for i, line in enumerate(lines))
     perimeter = 2 * (fw + fh)
     path_label = f" ~/projects/{key} "
+    crisp = ' shape-rendering="crispEdges"'
+    icon, icon_css = bitmap(ICONS[key], 33, 41, 3, WHITE, crisp), ""
+    if key in ICON_ALT:
+        frame, period, shown = ICON_ALT[key]
+        icon = (bitmap(ICONS[key], 33, 41, 3, WHITE, crisp + ' class="ia"')
+                + bitmap(frame, 33, 41, 3, WHITE, crisp + ' class="ib" opacity="0"'))
+        cut = 100 - shown
+        icon_css = (f".ia{{animation:ia {period}s steps(1) infinite}}.ib{{animation:ib {period}s steps(1) infinite}}"
+                    f"@keyframes ia{{0%{{opacity:1}}{cut}%,100%{{opacity:0}}}}"
+                    f"@keyframes ib{{0%{{opacity:0}}{cut}%,100%{{opacity:1}}}}")
     body = f"""<rect x="0.5" y="0.5" width="{W - 1}" height="{H - 1}" rx="12" fill="{BG}" stroke="{BORDER}"/>
 <rect x="{fx}" y="{fy}" width="{fw}" height="{fh}" rx="6" stroke="{BORDER}"/>
 <rect class="streak" x="{fx}" y="{fy}" width="{fw}" height="{fh}" rx="6" stroke="{WHITE}" stroke-width="2"
@@ -225,7 +252,7 @@ def card(key: str, data: dict) -> str:
 {text(26, fy + 4, path_label, 11.5, DIM)}
 {label_on_frame(W - 26, fy, tag_text, 11, reverse, anchor_end=True)}
 <rect x="26" y="34" width="50" height="50" rx="4" stroke="{BORDER}"/>
-{bitmap(ICONS[key], 33, 41, 3, WHITE, ' shape-rendering="crispEdges"')}
+{icon}
 {text(92, 56, data["title"], 20, WHITE, "700")}
 {text(92, 78, data["metric"], 12.5, MUTED)}
 {text(W - 26, 78, perms, 12, DIM, anchor="end")}
@@ -233,7 +260,7 @@ def card(key: str, data: dict) -> str:
 {chips(data["chips"], H - 34)}
 </g>"""
     css = f""".streak{{opacity:1;animation:run 8s linear infinite}}
-@keyframes run{{from{{stroke-dashoffset:0}}to{{stroke-dashoffset:-{perimeter}}}}}"""
+@keyframes run{{from{{stroke-dashoffset:0}}to{{stroke-dashoffset:-{perimeter}}}}}{icon_css}"""
     return svg(W, H, body, css, f"{data['title']}: {data['desc']}")
 
 
