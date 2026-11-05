@@ -9,15 +9,15 @@ import os
 import sys
 import urllib.request
 
-from svg_kit import (BG, BLUE, BORDER, CYAN, DIM, GREEN, MONO, MUTED, ORANGE, PANEL, PINK, PURPLE,
-                     SANS, TEXT, esc, mono_width, svg, write)
+from svg_kit import (BG, BLINK, BORDER, DIM, GREYS, MONO, MUTED, STATIC, TEXT, WHITE, esc, mono_width, row,
+                     svg, text, typing, window, write)
 
 QUERY = """query($login: String!) {
   user(login: $login) {
     followers { totalCount }
     repositories(ownerAffiliations: OWNER, isFork: false, first: 100) {
       totalCount
-      nodes { languages(first: 10, orderBy: {field: SIZE, direction: DESC}) {
+      nodes { isPrivate languages(first: 10, orderBy: {field: SIZE, direction: DESC}) {
         edges { size node { name color } } } }
     }
     createdAt
@@ -57,53 +57,65 @@ def code_size(repos: list) -> str:
 
 
 def card(user: dict) -> str:
-    width, height = 1000, 236
+    """htop-style card: language meters on the left, totals on the right, F-key bar below."""
+    width, height, size = 1000, 300, 14
+    cw = size * 0.6
     repos = user["repositories"]
     langs = languages(repos["nodes"])
     used = {e["node"]["name"] for r in repos["nodes"] for e in r["languages"]["edges"]} - SKIP_LANGS
-    # Contribution totals are deliberately not shown: this account's calendar is inflated by
-    # auto-generated commits, so only metrics that reflect real work go on the card.
-    metrics = [
-        (str(repos["totalCount"]), "REPOSITORIES", CYAN),
-        (str(len(used)), "LANGUAGES USED", GREEN),
-        (langs[0][0] if langs else "-", "TOP LANGUAGE", ORANGE),
-        (code_size(repos["nodes"]), "CODE WRITTEN", "#e3b341"),
-        (str(user["followers"]["totalCount"]), "FOLLOWERS", PURPLE),
-        (user["createdAt"][:4], "ON GITHUB SINCE", PINK),
+    private = sum(1 for r in repos["nodes"] if r.get("isPrivate"))
+    # Contribution totals are deliberately not shown: this account's calendar was inflated by
+    # auto-generated commits once, so only metrics that reflect real work go on the card.
+    meters, bar_chars = [], 34
+    for i, (name, share, _) in enumerate(langs):
+        y = 80 + i * 26
+        filled = max(1, round(share * bar_chars))
+        pct = f"{share * 100:.1f}%"
+        bars = "|" * filled
+        x_bar = 28 + 12 * cw
+        clip_w = mono_width(bars, size) + 1
+        start_w = clip_w if STATIC else 0
+        meters.append(
+            f'<clipPath id="m{i}"><rect x="{x_bar:.1f}" y="{y - 14}" width="{start_w:.1f}" height="20">'
+            f'{typing("width", 0, clip_w, filled, 0.5 + 0.1 * i, 0.03 * filled)}</rect></clipPath>'
+            + text(28, y, name[:11].ljust(11), size, TEXT)
+            + text(28 + 11 * cw, y, "[", size, WHITE, "700")
+            + f'<g clip-path="url(#m{i})">{text(x_bar, y, bars, size, GREYS[7 - min(i, 3)], "700")}</g>'
+            + text(28 + (12 + bar_chars) * cw, y, pct.rjust(6), size, MUTED)
+            + text(28 + (18 + bar_chars) * cw, y, "]", size, WHITE, "700"))
+    info = [
+        ("Repos", f"{repos['totalCount']} total, {private} private"),
+        ("Languages", f"{len(used)} used, top {langs[0][0] if langs else '-'}"),
+        ("Code", f"{code_size(repos['nodes'])} written"),
+        ("Followers", str(user["followers"]["totalCount"])),
+        ("Uptime", f"on GitHub since {user['createdAt'][:4]}"),
+        ("Load avg", "ship · ship · ship"),
     ]
-    tiles = []
-    for i, (value, label, accent) in enumerate(metrics):
-        x, y = 24 + (i % 3) * 168, 24 + (i // 3) * 94
-        size = min(27.0, 124 / max(mono_width(value, 1), 0.1))  # long values ("JavaScript") shrink to fit
-        tiles.append(f'<g class="m" style="animation-delay:{0.08 * i:.2f}s">'
-                     f'<rect x="{x}" y="{y}" width="156" height="82" rx="12" fill="{BG}" stroke="{BORDER}"/>'
-                     f'<text x="{x + 16}" y="{y + 42}" font-family="{MONO}" font-size="{size:.1f}" font-weight="700" fill="{accent}">{esc(value)}</text>'
-                     f'<text x="{x + 16}" y="{y + 64}" font-family="{MONO}" font-size="10.5" letter-spacing="1" fill="{MUTED}">{label}</text></g>')
-
-    bar_x, bar_w, bar = 560, 412, []
-    x = bar_x
-    for name, share, color in langs:
-        w = max(share * bar_w, 3)
-        bar.append(f'<rect class="b" x="{x:.1f}" y="62" width="{w:.1f}" height="12" fill="{color}"/>')
-        x += w
-    legend = []
-    for i, (name, share, color) in enumerate(langs):
-        lx, ly = bar_x + (i % 2) * 210, 104 + (i // 2) * 30
-        legend.append(f'<circle cx="{lx + 6}" cy="{ly - 4}" r="5" fill="{color}"/>'
-                      f'<text x="{lx + 18}" y="{ly}" font-family="{SANS}" font-size="13.5" fill="{TEXT}">{esc(name)}'
-                      f'<tspan fill="{MUTED}" font-family="{MONO}" font-size="12"> {share * 100:.1f}%</tspan></text>')
-    body = f"""<defs><clipPath id="bar"><rect x="{bar_x}" y="62" width="{bar_w}" height="12" rx="6"/></clipPath></defs>
-<rect x="0.5" y="0.5" width="{width - 1}" height="{height - 1}" rx="16" fill="{PANEL}" stroke="{BORDER}"/>
-{''.join(tiles)}
-<text x="{bar_x}" y="44" font-family="{MONO}" font-size="12" font-weight="700" letter-spacing="1.5" fill="{BLUE}">TOP LANGUAGES · ALL REPOS</text>
-<g clip-path="url(#bar)">{''.join(bar)}</g>
-{''.join(legend)}
-<text x="{width - 24}" y="{height - 16}" text-anchor="end" font-family="{MONO}" font-size="10.5" fill="{DIM}">all repos are private · numbers only, no code</text>"""
-    css = """.m{animation:up .5s ease-out both}
-@keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.b{transform-box:fill-box;transform-origin:left;animation:grow 1.2s cubic-bezier(.2,.8,.2,1) both}
-@keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}"""
-    return svg(width, height, body, css, "GitHub stats")
+    rx = 600
+    right = "".join(row(rx, 80 + i * 26, [(f"{k}:".ljust(11), MUTED), (v, WHITE, "700")], size)
+                    for i, (k, v) in enumerate(info))
+    keys = [("F1", "whoami"), ("F2", "projects"), ("F3", "agents"), ("F4", "stack"), ("F5", "telegram"),
+            ("F10", "ship")]
+    fkeys, col = [], 0
+    bar_y = height - 52
+    for key, label in keys:
+        kx = 28 + col * cw
+        lw = (len(label) + 1) * cw
+        fkeys.append(text(kx, bar_y + 15, key, size, WHITE, "700")
+                     + f'<rect x="{kx + len(key) * cw:.1f}" y="{bar_y}" width="{lw:.1f}" height="21" fill="#bdbdbd"/>'
+                     + text(kx + len(key) * cw, bar_y + 15, label, size, BG, "700"))
+        col += len(key) + len(label) + 2
+    back, front = window(width, height, "htop", "github.com/xcrpty7")
+    body = f"""{back}
+<g font-family="{MONO}">
+{''.join(meters)}
+<path d="M{rx - 28} 62V{62 + 6 * 26}" stroke="{BORDER}" stroke-dasharray="2 5"/>
+{right}
+{''.join(fkeys)}
+{text(width - 28, bar_y + 15, "private repos: numbers only, never code", 11.5, DIM, anchor="end")}
+</g>
+{front}"""
+    return svg(width, height, body, BLINK, "GitHub stats")
 
 
 def main() -> int:

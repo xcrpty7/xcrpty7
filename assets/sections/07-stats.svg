@@ -1,9 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="64" viewBox="0 0 1000 64" role="img" fill="none"><title>07 LIVE STATS</title><style>.dot{animation:run 3.2s ease-in-out infinite}
-@keyframes run{0%{transform:translateX(0);opacity:0}10%{opacity:1}80%{opacity:.8}100%{transform:translateX(690px);opacity:0}}@media (prefers-reduced-motion: reduce){*{animation:none!important}}</style><defs><linearGradient id="fade" x1="0" y1="0" x2="1" y2="0">
-<stop offset="0" stop-color="#e3b341" stop-opacity="0.9"/><stop offset="1" stop-color="#e3b341" stop-opacity="0"/></linearGradient></defs>
-<rect x="0.5" y="0.5" width="999" height="63" rx="12" fill="#0d1117" stroke="#253041"/>
-<rect x="14" y="16" width="5" height="32" rx="2.5" fill="#e3b341"/>
-<text x="34" y="41" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="21" font-weight="700" letter-spacing="1">
-<tspan fill="#e3b341">07</tspan><tspan fill="#e6edf3" dx="14">LIVE STATS</tspan></text>
-<rect x="250" y="31" width="726" height="2" fill="url(#fade)"/>
-<circle class="dot" cx="250" cy="32" r="3.5" fill="#e3b341"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="58" viewBox="0 0 1000 58" role="img" fill="none"><title>$ htop  # live stats</title><style>.cur{animation:blink 1.06s steps(1) infinite}@keyframes blink{50%{opacity:0}}@media (prefers-reduced-motion: reduce){*{animation:none!important}}</style><defs><clipPath id="c"><rect x="271.0" y="18.4" width="0.0" height="25.6"><animate attributeName="width" values="0.0;10.1;20.2;30.3;40.4" calcMode="discrete" begin="0.35s" dur="0.22s" fill="freeze"/></rect></clipPath></defs>
+<rect x="0.5" y="0.5" width="999" height="57" rx="10" fill="#000000" stroke="#2e2e2e"/>
+<rect x="14" y="14" width="50" height="30" rx="3" fill="#e6e6e6"/>
+<g font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'DejaVu Sans Mono','Liberation Mono',monospace">
+<text x="39.0" y="35.0" font-size="15" fill="#000000" font-weight="700" text-anchor="middle" textLength="18.0" lengthAdjust="spacing" xml:space="preserve">07</text>
+<text x="80.0" y="36.0" font-size="16" fill="#ffffff" font-weight="700" textLength="153.6" lengthAdjust="spacing" xml:space="preserve">xcrpty7@tashkent</text><text x="233.6" y="36.0" font-size="16" fill="#9d9d9d" textLength="9.6" lengthAdjust="spacing" xml:space="preserve">:</text><text x="243.2" y="36.0" font-size="16" fill="#9d9d9d" textLength="9.6" lengthAdjust="spacing" xml:space="preserve">~</text><text x="252.8" y="36.0" font-size="16" fill="#ffffff" font-weight="700" textLength="19.2" lengthAdjust="spacing" xml:space="preserve">$ </text><g clip-path="url(#c)"><text x="272.0" y="36.0" font-size="16" fill="#e6e6e6" textLength="38.4" lengthAdjust="spacing" xml:space="preserve">htop</text></g><rect class="cur" x="272.0" y="22.9" width="9.6" height="16.8" fill="#ffffff"><animate attributeName="x" values="272.0;281.6;291.2;300.8;310.4" calcMode="discrete" begin="0.35s" dur="0.22s" fill="freeze"/></rect>
+<text x="978.0" y="35.0" font-size="13" fill="#5f5f5f" text-anchor="end" textLength="93.6" lengthAdjust="spacing" xml:space="preserve"># live stats</text>
+</g></svg>

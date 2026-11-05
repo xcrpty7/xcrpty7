@@ -1,12 +1,12 @@
-"""Hero banner, section headers and footer.
+"""Hero banner (CRT boot screen), section prompts and the footer.
 
 The X_CRPTY7 logo is the owner's own 3D block design from the old README, converted
 from box-drawing characters into vector shapes so it no longer depends on the font.
 """
 import random
 
-from svg_kit import (BG, BLUE, CYAN, DIM, GREEN, MONO, MUTED, ORANGE, PINK, PURPLE, RED, STATIC, TEXT, esc,
-                     mono_width, svg, typing, write)
+from svg_kit import (BG, BLINK, BORDER, DIM, MONO, MUTED, STATIC, TEXT, WHITE, appear, esc, mono_width,
+                     prompt, row, smil, svg, text, typing, write)
 
 LOGO = [
     "██╗  ██╗           ██████╗ ██████╗  ██████╗  ████████╗ ██╗   ██╗ ███████╗",
@@ -37,18 +37,18 @@ def _line_segments(ch: str, x: float, y: float) -> list:
 def logo_shapes(ox: float, oy: float) -> tuple:
     """Return (blocks, lines): merged rects for █ runs and polylines for the 3D edges."""
     blocks, lines = [], []
-    for row, text in enumerate(LOGO):
-        y = oy + row * CELL_H
+    for r, line in enumerate(LOGO):
+        y = oy + r * CELL_H
         col = 0
-        while col < len(text):
-            if text[col] == "█":
+        while col < len(line):
+            if line[col] == "█":
                 start = col
-                while col < len(text) and text[col] == "█":
+                while col < len(line) and line[col] == "█":
                     col += 1
                 blocks.append(f'<rect x="{ox + start * CELL_W:.1f}" y="{y:.1f}" '
                               f'width="{(col - start) * CELL_W:.1f}" height="{CELL_H}"/>')
                 continue
-            for seg in _line_segments(text[col], ox + col * CELL_W, y):
+            for seg in _line_segments(line[col], ox + col * CELL_W, y):
                 pts = " ".join(f"{px:.1f},{py:.1f}" for px, py in seg)
                 lines.append(f'<polyline points="{pts}"/>')
             col += 1
@@ -58,153 +58,219 @@ def logo_shapes(ox: float, oy: float) -> tuple:
 def rotating(phrases: list, cx: float, y: float) -> str:
     """Phrases that take turns under the logo, each with its own blinking cursor."""
     out = []
-    for i, text in enumerate(phrases):
-        w = mono_width(text, 15)
+    for i, s in enumerate(phrases):
+        w = mono_width(s, 15)
         x = cx - w / 2
-        hidden = "" if i == 0 else ' opacity="0"' if STATIC else ""
+        hidden = ' opacity="0"' if STATIC and i else ""
         out.append(f'<g class="ph ph{i}" style="animation-delay:{3.5 * i}s"{hidden}>'
-                   f'<text x="{x:.1f}" y="{y}" font-family="{MONO}" font-size="15" fill="{MUTED}" '
-                   f'textLength="{w:.0f}" lengthAdjust="spacing" xml:space="preserve">{esc(text)}</text>'
-                   f'<rect class="cursor" x="{x + w + 8:.1f}" y="{y - 13}" width="9" height="17" fill="{GREEN}"/></g>')
+                   f'{text(x, y, s, 15, MUTED)}'
+                   f'<rect class="cur" x="{x + w + 8:.1f}" y="{y - 13}" width="9" height="17" fill="{WHITE}"/></g>')
     return "".join(out)
 
 
+BOOT = [
+    [("XCRPTY7 BIOS 2026.11", WHITE, "700"), ("  ·  tashkent node  ·  41.31N 69.24E", DIM)],
+    [("[ ", DIM), ("OK", WHITE, "700"), (" ] ", DIM), ("mounted /home/xcrpty7", MUTED)],
+    [("[ ", DIM), ("OK", WHITE, "700"), (" ] ", DIM), ("started claude-code.service", MUTED)],
+    [("[ ", DIM), ("OK", WHITE, "700"), (" ] ", DIM), ("started telegram-agents.target", MUTED)],
+    [("[ ", DIM), ("OK", WHITE, "700"), (" ] ", DIM), ("reached target ship-products", MUTED)],
+]
+PHRASES = [
+    "Tashkent, UZ  ·  AI agents · Telegram bots · MCP  ·  shipping since 14",
+    "NASA Space Apps  ·  Moon & Mars on Earth  ·  30 sites, 6 criteria",
+    "the model talks, the code decides  ·  nothing sent without a yes",
+]
+# horizontal bands of the logo (logo-local y) and how far each one jumps during a glitch
+SLICES = [(0, 22, (-14, 6, 0)), (22, 50, (10, -4, 3)), (50, 70, (0, -18, 8)),
+          (70, 98, (6, 0, -10)), (98, 120, (-8, 12, 0)), (120, 150, (16, -6, 0))]
+
+
 def hero() -> str:
-    width, height = 1200, 380
-    logo_w = len(LOGO[0]) * CELL_W
-    ox, oy = (width - logo_w) / 2, 64
+    width, height = 1200, 460
+    logo_w, logo_h = len(LOGO[0]) * CELL_W, CELL_H * len(LOGO)
+    ox, oy = (width - logo_w) / 2, 132
     blocks, lines = logo_shapes(ox, oy)
     rng = random.Random(7)
 
-    floor = "".join(f'<line x1="{600 + (i - 12) * 18}" y1="300" x2="{600 + (i - 12) * 140}" y2="{height}"/>'
-                    for i in range(25))
-    rows = "".join(f'<line x1="0" y1="{300 + k * 16}" x2="{width}" y2="{300 + k * 16}"/>' for k in range(6))
-    particles = "".join(
-        f'<circle class="p" cx="{rng.randint(40, width - 40)}" cy="{rng.randint(40, height - 20)}" '
-        f'r="{rng.choice((1, 1.2, 1.6, 2))}" style="animation-delay:-{rng.uniform(0, 9):.1f}s;'
-        f'animation-duration:{rng.uniform(7, 13):.1f}s"/>' for _ in range(26))
-    sub1 = "FULL-STACK  ·  AI-AGENT DEVELOPER"
-    phrases = [
-        "Tashkent, UZ  ·  AI agents · Telegram bots · MCP  ·  shipping since 14",
-        "NASA Space Apps  ·  Moon & Mars on Earth  ·  30 sites, 6 criteria",
-        "the model talks, the code decides  ·  nothing sent without a yes",
-    ]
+    boot = []
+    for i, parts in enumerate(BOOT):
+        op, show = appear(0.1 + 0.22 * i)
+        boot.append(f'<g opacity="{op}">{show}{row(34, 44 + 17 * i, parts, 11.5)}</g>')
+    hud = (text(width - 34, 44, "[ SYS://XCRPTY7 ]", 11.5, DIM, anchor="end")
+           + text(width - 34, 61, "ONLINE", 11.5, WHITE, "700", anchor="end")
+           + f'<rect class="pulse" x="{width - 34 - mono_width("ONLINE", 11.5) - 16:.1f}" y="52" width="8" height="8" fill="{WHITE}"/>'
+           + text(width - 34, 78, "uz_UZ · ru_RU · en_US", 11.5, DIM, anchor="end"))
 
-    defs = f"""<defs>
-  <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a0f16"/><stop offset="1" stop-color="#07130d"/></linearGradient>
-  <radialGradient id="glow" cx="0.5" cy="0.42" r="0.55"><stop offset="0" stop-color="{GREEN}" stop-opacity="0.22"/><stop offset="1" stop-color="{GREEN}" stop-opacity="0"/></radialGradient>
-  <linearGradient id="logoFill" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="{GREEN}"/><stop offset="0.55" stop-color="#5ee08a"/><stop offset="1" stop-color="{CYAN}"/></linearGradient>
-  <linearGradient id="shine" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="0.5" stop-color="#fff" stop-opacity="0.75"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
-  <linearGradient id="floorFade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000"/><stop offset="1" stop-color="#fff"/></linearGradient>
-  <mask id="floorMask"><rect x="0" y="300" width="{width}" height="{height - 300}" fill="url(#floorFade)"/></mask>
-  <mask id="logoMask"><g fill="#fff">{blocks}</g></mask>
-  <filter id="blur" x="-10%" y="-30%" width="120%" height="160%"><feGaussianBlur stdDeviation="7"/></filter>
-</defs>"""
+    reveal_h = logo_h + 20
+    clip_h = reveal_h if STATIC else 0
+    slice_defs = "".join(f'<clipPath id="s{i}"><rect x="0" y="{oy + a - (6 if i == 0 else 0)}" width="{width}" '
+                         f'height="{b - a + (6 if i == 0 else 0)}"/></clipPath>' for i, (a, b, _) in enumerate(SLICES))
+    slices = "".join(f'<g clip-path="url(#s{i})"><use href="#L" class="sl s{i}"/></g>' for i in range(len(SLICES)))
+    glitch_css = "".join(
+        f".s{i}{{animation:g{i} 7s steps(1) infinite}}"
+        f"@keyframes g{i}{{0%,90%,94%,97%,100%{{transform:none}}91%{{transform:translateX({d1}px)}}"
+        f"92.5%{{transform:translateX({d2}px)}}96%{{transform:translateX({d3}px)}}}}"
+        for i, (_, _, (d1, d2, d3)) in enumerate(SLICES))
+    grain = (f'<filter id="grain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" '
+             f'baseFrequency="0.85" numOctaves="1" seed="4"/><feColorMatrix type="saturate" values="0"/>'
+             f'<feComponentTransfer><feFuncA type="table" tableValues="0 0.09"/></feComponentTransfer></filter>')
+    stars = "".join(f'<rect x="{rng.randint(20, width - 20)}" y="{rng.randint(100, height - 60)}" width="2" height="2" '
+                    f'class="tw" style="animation-delay:-{rng.uniform(0, 5):.1f}s" fill="{MUTED}"/>' for _ in range(22))
 
-    hud = f"""<g font-family="{MONO}" font-size="12" letter-spacing="2" fill="{DIM}">
-  <text x="34" y="38">[ SYS://XCRPTY7 ]</text>
-  <text x="{width - 34}" y="38" text-anchor="end" fill="{GREEN}">ONLINE</text>
-  <text x="34" y="{height - 26}">LAT 41.31 · LON 69.24</text>
-  <text x="{width - 34}" y="{height - 26}" text-anchor="end">BUILD 2026.10</text>
-</g>
-<circle class="pulse" cx="{width - 104}" cy="34" r="4" fill="{GREEN}"/>
-<g stroke="{GREEN}" stroke-width="2" opacity="0.6">
-  <path d="M18 34V18H34M{width - 34} 18H{width - 18}V34M18 {height - 34}V{height - 18}H34M{width - 34} {height - 18}H{width - 18}V{height - 34}"/>
+    bar_y, bar_h, size = height - 30, 30, 12.5
+    cw = size * 0.6
+    left = [("[xcrpty7] ", BG, "700"), ("0:zsh  1:agents  2:bots  ", BG)]
+    left_w = sum(len(p[0]) for p in left)
+    cur_tab = " 3:ship* "
+    right_s = "tashkent  41.31N 69.24E  ·  uz ru en "
+    spin_x = width - 16 - mono_width(right_s, size) - 4 * cw
+    hidden = ' opacity="0"'
+    spinner = "".join(f'<text class="sp sp{i}" x="{spin_x + cw:.1f}" y="{bar_y + 20}" font-size="{size}" '
+                      f'font-weight="700" fill="{BG}"{hidden if i else ""}>{esc(ch)}</text>'
+                      for i, ch in enumerate("|/-\\"))
+    tmux = f"""<g clip-path="url(#frame)">
+<rect x="0" y="{bar_y}" width="{width}" height="{bar_h}" fill="#d6d6d6"/>
+{row(16, bar_y + 20, left, size)}
+<rect x="{16 + left_w * cw:.1f}" y="{bar_y}" width="{len(cur_tab) * cw:.1f}" height="{bar_h}" fill="{BG}"/>
+{text(16 + left_w * cw, bar_y + 20, cur_tab, size, WHITE, "700")}
+{text(spin_x, bar_y + 20, "[ ]", size, BG, "700")}{spinner}
+{text(width - 16, bar_y + 20, right_s, size, BG, anchor="end")}
 </g>"""
 
-    body = f"""{defs}
-<rect width="{width}" height="{height}" rx="18" fill="url(#bg)"/>
-<rect width="{width}" height="{height}" rx="18" fill="url(#glow)"/>
-<g stroke="{GREEN}" stroke-opacity="0.35" mask="url(#floorMask)">{floor}<g class="rows">{rows}</g></g>
-<g fill="{GREEN}" opacity="0.55">{particles}</g>
-<g class="halo" fill="{GREEN}" filter="url(#blur)" opacity="0.45">{blocks}</g>
-<g class="glitch r" fill="{RED}" opacity="0">{blocks}</g>
-<g class="glitch c" fill="{CYAN}" opacity="0">{blocks}</g>
-<g fill="none" stroke="#2f9e57" stroke-width="1.5" stroke-linejoin="miter">{lines}</g>
-<g fill="url(#logoFill)">{blocks}</g>
-<g mask="url(#logoMask)"><rect class="shine" x="-300" y="{oy}" width="260" height="{CELL_H * 6}" fill="url(#shine)" opacity="0"/></g>
-<rect class="scan" x="0" y="0" width="{width}" height="3" fill="{GREEN}" opacity="0"/>
-<text x="{width / 2}" y="{oy + CELL_H * 6 + 52}" text-anchor="middle" font-family="{MONO}" font-size="21" font-weight="700" letter-spacing="7" fill="{TEXT}">{esc(sub1)}</text>
-{rotating(phrases, width / 2, oy + CELL_H * 6 + 84)}
-{hud}"""
+    defs = f"""<defs>
+  <clipPath id="frame"><rect width="{width}" height="{height}" rx="16"/></clipPath>
+  <clipPath id="reveal"><rect x="0" y="{oy - 10}" width="{width}" height="{clip_h}">{typing("height", 0, reveal_h, 12, 1.25, 0.55)}</rect></clipPath>
+  {slice_defs}
+  <pattern id="raster" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="4" height="3" fill="#f2f2f2"/><rect y="3" width="4" height="1" fill="#7d7d7d"/></pattern>
+  <pattern id="scan" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="4" height="1" fill="#fff" fill-opacity="0.035"/></pattern>
+  <radialGradient id="glow" cx="0.5" cy="0.45" r="0.6"><stop offset="0" stop-color="#fff" stop-opacity="0.09"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="0.5" cy="0.5" r="0.75"><stop offset="0.6" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="0.75"/></radialGradient>
+  <linearGradient id="shine" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="0.5" stop-color="#fff" stop-opacity="0.9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+  <linearGradient id="roll" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="0.5" stop-color="#fff" stop-opacity="0.05"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+  <mask id="logoMask"><g fill="#fff">{blocks}</g></mask>
+  <filter id="blur" x="-10%" y="-40%" width="120%" height="180%"><feGaussianBlur stdDeviation="8"/></filter>
+  {grain}
+  <g id="L"><g fill="none" stroke="#5c5c5c" stroke-width="1.5">{lines}</g><g fill="url(#raster)">{blocks}</g></g>
+</defs>"""
 
-    css = f"""
-.p{{animation:drift linear infinite}}
-@keyframes drift{{0%{{transform:translateY(0);opacity:0}}15%{{opacity:.9}}100%{{transform:translateY(-120px);opacity:0}}}}
-.rows{{animation:rows 1.6s linear infinite}}
-@keyframes rows{{from{{transform:translateY(0)}}to{{transform:translateY(16px)}}}}
+    flash = smil('<animate attributeName="opacity" values="0;0.85;0" begin="1.75s" dur="0.7s" fill="freeze"/>')
+    body = f"""{defs}
+<g clip-path="url(#frame)">
+<rect width="{width}" height="{height}" fill="{BG}"/>
+<rect width="{width}" height="{height}" fill="url(#glow)"/>
+<g>{stars}</g>
+<g clip-path="url(#reveal)">
+  <g class="halo" fill="#fff" filter="url(#blur)" opacity="0.2">{blocks}</g>
+  <g class="ghost" fill="#8c8c8c" opacity="0">{blocks}</g>
+  {slices}
+  <g mask="url(#logoMask)"><rect class="shine" x="-300" y="{oy}" width="240" height="{logo_h}" fill="url(#shine)" opacity="0"/></g>
+  <g fill="#fff" filter="url(#blur)" opacity="0">{blocks}{flash}</g>
+</g>
+<text x="{width / 2}" y="{oy + logo_h + 52}" text-anchor="middle" font-family="{MONO}" font-size="20" font-weight="700" letter-spacing="7" fill="{WHITE}">FULL-STACK  ·  AI-AGENT DEVELOPER</text>
+<g font-family="{MONO}">
+{rotating(PHRASES, width / 2, oy + logo_h + 88)}
+{''.join(boot)}
+{hud}
+{tmux}
+</g>
+<g stroke="{DIM}" stroke-width="2"><path d="M18 {height - 66}V{height - 50}H34M{width - 34} {height - 50}H{width - 18}V{height - 66}"/></g>
+<rect class="roll" x="0" y="-140" width="{width}" height="140" fill="url(#roll)"/>
+<rect width="{width}" height="{height}" fill="url(#scan)"/>
+<rect width="{width}" height="{height}" filter="url(#grain)"/>
+<rect width="{width}" height="{height}" fill="url(#vig)"/>
+</g>
+<rect x="0.5" y="0.5" width="{width - 1}" height="{height - 1}" rx="16" stroke="{BORDER}"/>"""
+
+    css = f"""{BLINK}
 .halo{{animation:halo 4s ease-in-out infinite}}
-@keyframes halo{{0%,100%{{opacity:.28}}50%{{opacity:.6}}}}
-.glitch{{animation:glitch 5s steps(1) infinite}}
-.glitch.c{{animation-delay:.06s}}
-@keyframes glitch{{0%,88%,100%{{opacity:0;transform:translate(0,0)}}89%{{opacity:.75;transform:translate(-5px,1px)}}90.5%{{opacity:.6;transform:translate(4px,-1px)}}92%{{opacity:0}}95%{{opacity:.5;transform:translate(-3px,0)}}96%{{opacity:0}}}}
-.shine{{opacity:1;animation:shine 4.5s ease-in-out infinite}}
-@keyframes shine{{0%{{transform:translateX(0)}}60%,100%{{transform:translateX({width + 600}px)}}}}
-.scan{{animation:scan 6s linear infinite}}
-@keyframes scan{{0%{{transform:translateY(0);opacity:0}}5%{{opacity:.35}}95%{{opacity:.35}}100%{{transform:translateY({height}px);opacity:0}}}}
-.cursor{{animation:blink 1s steps(1) infinite}}
-@keyframes blink{{50%{{opacity:0}}}}
+@keyframes halo{{0%,100%{{opacity:.14}}50%{{opacity:.3}}}}
+{glitch_css}
+.ghost{{animation:ghost 7s steps(1) infinite}}
+@keyframes ghost{{0%,90%,94%,100%{{opacity:0;transform:none}}91%{{opacity:.6;transform:translate(7px,-2px)}}92.5%{{opacity:.45;transform:translate(-6px,1px)}}}}
+.shine{{opacity:1;animation:shine 5s ease-in-out 2.4s infinite both}}
+@keyframes shine{{0%{{transform:translateX(0)}}55%,100%{{transform:translateX({width + 600}px)}}}}
+.roll{{animation:roll 7s linear infinite}}
+@keyframes roll{{from{{transform:translateY(0)}}to{{transform:translateY({height + 140}px)}}}}
+.tw{{animation:tw 5s ease-in-out infinite}}
+@keyframes tw{{0%,100%{{opacity:.15}}50%{{opacity:.8}}}}
 .ph{{opacity:0;animation:phrase 10.5s linear infinite}}
 @keyframes phrase{{0%{{opacity:0}}3%,30%{{opacity:1}}33%,100%{{opacity:0}}}}
 @media (prefers-reduced-motion: reduce){{.ph0{{opacity:1}}}}
-.pulse{{transform-origin:{width - 104}px 34px;animation:pulse 1.6s ease-out infinite}}
-@keyframes pulse{{0%{{opacity:1}}70%{{opacity:.2}}100%{{opacity:1}}}}
+.pulse{{animation:blink 1.4s steps(1) infinite}}
+.sp{{animation:sp .8s steps(1) infinite}}
+.sp1{{animation-delay:.2s}}.sp2{{animation-delay:.4s}}.sp3{{animation-delay:.6s}}
+@keyframes sp{{0%{{opacity:1}}25%,100%{{opacity:0}}}}
 """
-    return svg(width, height, body, css, "xcrpty7 — Full-Stack & AI-Agent Developer")
+    return svg(width, height, body, css, "xcrpty7: full-stack and AI-agent developer from Tashkent, Uzbekistan")
 
 
-def section(number: str, label: str, accent: str) -> str:
-    width, height = 1000, 64
-    text_w = mono_width(f"{number}  {label}", 21) + 74
-    body = f"""<defs><linearGradient id="fade" x1="0" y1="0" x2="1" y2="0">
-<stop offset="0" stop-color="{accent}" stop-opacity="0.9"/><stop offset="1" stop-color="{accent}" stop-opacity="0"/></linearGradient></defs>
-<rect x="0.5" y="0.5" width="{width - 1}" height="{height - 1}" rx="12" fill="{BG}" stroke="#253041"/>
-<rect x="14" y="16" width="5" height="32" rx="2.5" fill="{accent}"/>
-<text x="34" y="41" font-family="{MONO}" font-size="21" font-weight="700" letter-spacing="1">
-<tspan fill="{accent}">{number}</tspan><tspan fill="{TEXT}" dx="14">{esc(label)}</tspan></text>
-<rect x="{text_w:.0f}" y="31" width="{width - text_w - 24:.0f}" height="2" fill="url(#fade)"/>
-<circle class="dot" cx="{text_w:.0f}" cy="32" r="3.5" fill="{accent}"/>"""
-    css = f""".dot{{animation:run 3.2s ease-in-out infinite}}
-@keyframes run{{0%{{transform:translateX(0);opacity:0}}10%{{opacity:1}}80%{{opacity:.8}}100%{{transform:translateX({width - text_w - 60:.0f}px);opacity:0}}}}"""
-    return svg(width, height, body, css, f"{number} {label}")
+def section(number: str, cmd: str, comment: str) -> str:
+    width, height = 1000, 58
+    defs, line, _ = prompt(80, 36, cmd, 16, begin=0.35, char_time=0.055, uid="c")
+    body = f"""<defs>{defs}</defs>
+<rect x="0.5" y="0.5" width="{width - 1}" height="{height - 1}" rx="10" fill="{BG}" stroke="{BORDER}"/>
+<rect x="14" y="14" width="50" height="30" rx="3" fill="{TEXT}"/>
+<g font-family="{MONO}">
+{text(39, 35, number, 15, BG, "700", anchor="middle")}
+{line}
+{text(width - 22, 35, f"# {comment}", 13, DIM, anchor="end")}
+</g>"""
+    return svg(width, height, body, BLINK, f"$ {cmd}  # {comment}")
 
 
 def footer() -> str:
-    width, height = 1200, 210
-    quote = '"I don\'t write code. I ship products."'
-    q_w = mono_width(quote, 26)
-    x0 = (width - q_w) / 2
-    full = q_w + 8
+    width, height = 1200, 300
+    defs, exit_line, t = prompt(40, 52, "exit", 15, begin=0.4, char_time=0.12, uid="x")
+    rows_ = []
+    for i, (s, fill) in enumerate((("logout", MUTED), ("Connection to xcrpty7 closed.", MUTED))):
+        op, show = appear(t + 0.3 + 0.25 * i)
+        rows_.append(f'<g opacity="{op}">{show}{text(40, 78 + 24 * i, s, 15, fill)}</g>')
+    quote = "\"I don't write code. I ship products.\""
+    size = 28
+    q_w = mono_width(quote, size)
+    x0, qy = (width - q_w) / 2, 178
+    begin = t + 1.0
     steps = len(quote)
-    clip_w = 0 if not STATIC else full
-    body = f"""<defs><radialGradient id="g" cx="0.5" cy="0.5" r="0.6"><stop offset="0" stop-color="{PURPLE}" stop-opacity="0.18"/><stop offset="1" stop-color="{PURPLE}" stop-opacity="0"/></radialGradient>
-<clipPath id="type"><rect x="{x0 - 4:.0f}" y="40" width="{clip_w:.0f}" height="60">{typing("width", 0, full, steps, 0.4, 2.6)}</rect></clipPath></defs>
-<rect width="{width}" height="{height}" rx="18" fill="{BG}"/>
-<rect width="{width}" height="{height}" rx="18" fill="url(#g)"/>
-<rect x="0.5" y="0.5" width="{width - 1}" height="{height - 1}" rx="18" stroke="#253041"/>
-<text x="{x0:.0f}" y="84" font-family="{MONO}" font-size="26" font-weight="700" fill="{TEXT}" clip-path="url(#type)" xml:space="preserve" textLength="{q_w:.0f}" lengthAdjust="spacing">{esc(quote)}</text>
-<rect class="cursor" x="{x0 + q_w + 6:.0f}" y="62" width="13" height="26" fill="{GREEN}">{typing("x", x0, x0 + q_w + 6, steps, 0.4, 2.6)}</rect>
-<text x="{width / 2}" y="138" text-anchor="middle" font-family="{MONO}" font-size="15" fill="{MUTED}" letter-spacing="1">
-<tspan fill="{GREEN}">$</tspan> open t.me/xcrpty7 <tspan fill="{DIM}">·</tspan> open github.com/xcrpty7</text>
-<text x="{width / 2}" y="172" text-anchor="middle" font-family="{MONO}" font-size="12" fill="{DIM}" letter-spacing="3">BUILT WITH CLAUDE CODE · RENDERED AS PURE SVG</text>"""
-    css = """.cursor{animation:blink 1s steps(1) infinite}
-@keyframes blink{50%{opacity:0}}"""
+    clip_w = q_w + 4 if STATIC else 0
+    body = f"""<defs>{defs}
+<clipPath id="type"><rect x="{x0 - 2:.0f}" y="{qy - 34}" width="{clip_w:.0f}" height="48">{typing("width", 0, q_w + 4, steps, begin, 2.4)}</rect></clipPath>
+<pattern id="scan" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="4" height="1" fill="#fff" fill-opacity="0.035"/></pattern>
+<radialGradient id="glow" cx="0.5" cy="0.55" r="0.6"><stop offset="0" stop-color="#fff" stop-opacity="0.07"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+</defs>
+<rect x="0.5" y="0.5" width="{width - 1}" height="{height - 1}" rx="16" fill="{BG}" stroke="{BORDER}"/>
+<g class="crt" font-family="{MONO}">
+<rect x="1" y="1" width="{width - 2}" height="{height - 2}" rx="15" fill="url(#glow)"/>
+{exit_line}{''.join(rows_)}
+<g clip-path="url(#type)">{text(x0, qy, quote, size, WHITE, "700")}</g>
+<rect class="cur" x="{x0 + (q_w + 6 if STATIC else 0):.0f}" y="{qy - 24}" width="15" height="28" fill="{WHITE}">{typing("x", x0, x0 + q_w + 6, steps, begin, 2.4)}</rect>
+{row(width / 2 - mono_width("$ open t.me/xcrpty7  ·  open github.com/xcrpty7", 15) / 2, 230,
+     [("$ ", WHITE, "700"), ("open t.me/xcrpty7", TEXT), ("  ·  ", DIM), ("open github.com/xcrpty7", TEXT)], 15)}
+<text x="{width / 2}" y="266" text-anchor="middle" font-size="11.5" fill="{DIM}" letter-spacing="3">BUILT WITH CLAUDE CODE · PURE SVG · NO JAVASCRIPT</text>
+<rect x="1" y="1" width="{width - 2}" height="{height - 2}" rx="15" fill="url(#scan)"/>
+</g>
+<rect class="flat" x="40" y="{height / 2 - 1}" width="{width - 80}" height="2" fill="{WHITE}" opacity="0"/>"""
+    css = f"""{BLINK}
+.crt{{transform-origin:{width / 2}px {height / 2}px;animation:crt 16s ease-in-out infinite}}
+@keyframes crt{{0%,80%{{transform:scale(1,1);opacity:1}}83%{{transform:scale(1.03,.004);opacity:1}}84%,96%{{transform:scale(1,.004);opacity:0}}98%{{transform:scale(1.02,1.05);opacity:1}}100%{{transform:scale(1,1)}}}}
+.flat{{transform-origin:{width / 2}px {height / 2}px;animation:flat 16s ease-in infinite}}
+@keyframes flat{{0%,82.5%{{opacity:0;transform:scaleX(1)}}83.5%{{opacity:1;transform:scaleX(1)}}87%{{opacity:1;transform:scaleX(.002)}}89%,95%{{opacity:0;transform:scaleX(.002)}}96%{{opacity:1;transform:scaleX(.002)}}97.5%{{opacity:.9;transform:scaleX(1)}}98.5%,100%{{opacity:0;transform:scaleX(1)}}}}
+"""
     return svg(width, height, body, css, "I don't write code. I ship products.")
 
 
 SECTIONS = {
-    "01-agents": ("01", "AI & AGENTS", PURPLE),
-    "02-pipeline": ("02", "HOW MY AGENTS WORK", GREEN),
-    "03-products": ("03", "PRODUCTS SHIPPED", CYAN),
-    "04-journey": ("04", "JOURNEY", PINK),
-    "05-stack": ("05", "TECH STACK", BLUE),
-    "06-rules": ("06", "HOW I WORK", ORANGE),
-    "07-stats": ("07", "LIVE STATS", "#e3b341"),
+    "01-whoami": ("01", "neofetch", "who am i"),
+    "02-man": ("02", "man xcrpty7", "what i do"),
+    "03-projects": ("03", "ls -l ~/projects", "what i built"),
+    "04-pipeline": ("04", "cat ~/agents/pipeline.txt", "how my agents work"),
+    "05-journey": ("05", "git log --graph --oneline", "journey"),
+    "06-stack": ("06", "ls /usr/local/bin", "tech stack"),
+    "07-stats": ("07", "htop", "live stats"),
 }
 
 if __name__ == "__main__":
     write("hero.svg", hero())
     write("footer.svg", footer())
-    for name, (num, label, accent) in SECTIONS.items():
-        write(f"sections/{name}.svg", section(num, label, accent))
+    for name, (num, cmd, comment) in SECTIONS.items():
+        write(f"sections/{name}.svg", section(num, cmd, comment))
     print("hero, footer, sections: ok")
